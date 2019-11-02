@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">BSC Notes</string>
+    <string name="notesIdLabel">Id:</string>
+    <string name="notesTitleLabel">Title:</string>
 </resources>
