@@ -15,8 +15,8 @@ class NotesListViewModel : ViewModel() {
         getNotes()
     }
 
-    fun getData(): List<Note>?{
-        return notesData.value
+    fun getData(): MutableLiveData<List<Note>>{
+        return notesData
     }
 
     private fun getNotes() {

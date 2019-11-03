@@ -8,9 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.lifecycle.Observer
 
 import cz.test.damirsovic.bscnotes.R
 import cz.test.damirsovic.bscnotes.viewmodel.NotesListViewModel
+import kotlinx.android.synthetic.main.notes_list_fragment.*
 
 class NotesListFragment : Fragment() {
 
@@ -34,21 +36,10 @@ class NotesListFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(NotesListViewModel::class.java)
-        viewManager = LinearLayoutManager(activity)
-        viewAdapter = NotesAdapter(myDataset)
-
-        recyclerView = findViewById<RecyclerView>(R.id.my_recycler_view).apply {
-            // use this setting to improve performance if you know that changes
-            // in content do not change the layout size of the RecyclerView
-            setHasFixedSize(true)
-
-            // use a linear layout manager
-            layoutManager = viewManager
-
-            // specify an viewAdapter (see also next example)
-            adapter = viewAdapter
-
-        }
+        notesRecyclerView.layoutManager = LinearLayoutManager(context)
+        viewModel.getData().observe(this, Observer { items ->
+            notesRecyclerView.adapter = NotesAdapter(items)
+        })
     }
 
 }

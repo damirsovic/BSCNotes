@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     tools:context=".view.NotesListFragment">
+    <data>
+        <variable
+            name="obj"
+            type="cz.test.damirsovic.bscnotes.model.Note" />
 
+        <variable
+            name="viewModel"
+            type="cz.test.damirsovic.bscnotes.viewmodel.NotesListViewModel" />
+    </data>
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/notesRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </FrameLayout>
+</layout>
