@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import cz.test.damirsovic.bscnotes.view.NotesListFragment
-import cz.test.damirsovic.bscnotes.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -13,7 +12,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val viewModel= ViewModelProviders.of(this)[MainViewModel::class.java]
         setFragment(NotesListFragment.newInstance())
     }
 
