@@ -12,13 +12,13 @@ import retrofit2.http.PUT
 
 interface DataApiService {
     @GET("notes")
-    fun getUsers(): Call<List<Note>>
+    fun getUsers(): Call<ArrayList<Note>>
 
     @GET("notes/{id}")
     fun getUser(id : Int): Call<Note>
 
     @POST("notes")
-    fun postUsers(): Call<List<Note>>
+    fun postUsers(): Call<ArrayList<Note>>
 
     @PUT("notes/{id}")
     fun putUser(id : Int): Call<Note>

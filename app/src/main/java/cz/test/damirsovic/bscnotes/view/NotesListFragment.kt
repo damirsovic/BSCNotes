@@ -1,5 +1,7 @@
 package cz.test.damirsovic.bscnotes.view
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,6 +11,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.ItemTouchHelper
 
 import cz.test.damirsovic.bscnotes.R
 import cz.test.damirsovic.bscnotes.viewmodel.NotesListViewModel
@@ -38,8 +41,13 @@ class NotesListFragment : Fragment() {
         viewModel = ViewModelProviders.of(this).get(NotesListViewModel::class.java)
         notesRecyclerView.layoutManager = LinearLayoutManager(context)
         viewModel.getData().observe(this, Observer { items ->
-            notesRecyclerView.adapter = NotesAdapter(items)
+            notesRecyclerView.addItemDecoration(DividerItemDecoration(context!!, DividerItemDecoration.VERTICAL_LIST))
+            val notesAdapter = NotesAdapter(items)
+            notesRecyclerView.adapter = notesAdapter
+            val itemTouchHelper = ItemTouchHelper(notesAdapter.simpleItemTouchCallback)
+            itemTouchHelper.attachToRecyclerView(notesRecyclerView)
         })
     }
+
 
 }
