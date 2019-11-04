@@ -4,33 +4,30 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import cz.test.damirsovic.bscnotes.model.DataApiService
 import cz.test.damirsovic.bscnotes.model.Note
+import cz.test.damirsovic.bscnotes.model.NotesRepository
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class NotesListViewModel : ViewModel() {
-    private val notesData = MutableLiveData<ArrayList<Note>>()
+    val repo = NotesRepository()
+    val dataList = repo.getItems()
 
-    init {
-        getNotes()
+    fun addData(note: Note) {
+        repo.addData(note)
     }
 
-    fun getData(): MutableLiveData<ArrayList<Note>>{
-        return notesData
+    fun addData(note: Note, position: Int) {
+        repo.addData(note, position)
     }
 
-    private fun getNotes() {
-        val service = DataApiService.create()
-        val call = service.getUsers()
-        call.enqueue(object : Callback<ArrayList<Note>> {
-            override fun onResponse(call: Call<ArrayList<Note>>, response: Response<ArrayList<Note>>) {
-                notesData.value = (response.body() as ArrayList<Note>?)!!
-                System.out.println(response.body())
-            }
-
-            override fun onFailure(call: Call<ArrayList<Note>>, t: Throwable) {
-                System.out.println(t.localizedMessage)
-            }
-        })
+    fun removeData(note: Note) {
+        repo.removeData(note)
     }
+
+    fun getItem(position: Int) : Note = repo.getItem(position)
+
+    fun getDataSize() : Int = repo.getDataSize()
+
+    fun getLastId() : Int = repo.getLastId()
 }

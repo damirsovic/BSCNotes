@@ -2,4 +2,6 @@
     <string name="app_name">BSC Notes</string>
     <string name="notesIdLabel">Id:</string>
     <string name="notesTitleLabel">Title:</string>
+    <string name="saveLabel">Save</string>
+    <string name="cancelLabel">Cancel</string>
 </resources>
