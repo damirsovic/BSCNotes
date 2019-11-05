@@ -21,8 +21,22 @@ class NotesListViewModel : ViewModel() {
         repo.addData(note, position)
     }
 
+    fun saveNotes(note: Note) {
+        repo.saveNotes(note)
+        addData(note)
+    }
+
     fun removeData(note: Note) {
         repo.removeData(note)
+    }
+
+    fun removeDataReal(note: Note) {
+        repo.removeDataReal(note)
+    }
+
+    fun replaceNote(oldNote: Note, newNote: Note): Int{
+        return repo.replaceData(oldNote, newNote)
+
     }
 
     fun getItem(position: Int) : Note = repo.getItem(position)

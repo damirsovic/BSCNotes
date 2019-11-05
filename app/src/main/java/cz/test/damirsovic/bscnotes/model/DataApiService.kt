@@ -1,30 +1,26 @@
 package cz.test.damirsovic.bscnotes.model
 
-import android.content.res.Resources
-import cz.test.damirsovic.bscnotes.R
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.DELETE
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.PUT
+import retrofit2.http.*
 
 interface DataApiService {
     @GET("notes")
-    fun getUsers(): Call<ArrayList<Note>>
+    fun getNotes(): Call<ArrayList<Note>>
 
     @GET("notes/{id}")
-    fun getUser(id : Int): Call<Note>
+    fun getNote(@Path("id") id : Int): Call<Note>
 
     @POST("notes")
-    fun postUsers(): Call<ArrayList<Note>>
+    fun postNote(@Body note: Note): Call<ResponseBody>
 
     @PUT("notes/{id}")
-    fun putUser(id : Int): Call<Note>
+    fun putNote(@Path("id") id : Int): Call<ResponseBody>
 
     @DELETE("notes/{id}")
-    fun deleteUser(id : Int): Call<Note>
+    fun deleteNote(@Path("id") id : Int): Call<ResponseBody>
 
     companion object {
         fun create(): DataApiService {

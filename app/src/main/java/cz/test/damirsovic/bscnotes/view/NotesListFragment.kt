@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.android.material.snackbar.Snackbar
 
 import cz.test.damirsovic.bscnotes.R
+import cz.test.damirsovic.bscnotes.events.OnItemClickListener
 import cz.test.damirsovic.bscnotes.model.Note
 import cz.test.damirsovic.bscnotes.viewmodel.NotesListViewModel
 import kotlinx.android.synthetic.main.add_note.view.*
@@ -59,7 +60,17 @@ class NotesListFragment : Fragment() {
                         restoreItem(deletedNote, position)
                     }
                     snackbar.setActionTextColor(Color.YELLOW)
+
+                    snackbar.addCallback(object : Snackbar.Callback() {
+
+                        override fun onDismissed(snackbar : Snackbar, event : Int) {
+                            if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
+                                viewModel.removeDataReal(deletedNote)
+                            }
+                        }
+                    })
                     snackbar.show()
+
                 }
             }
 
@@ -137,13 +148,18 @@ class NotesListFragment : Fragment() {
         return inflater.inflate(R.layout.notes_list_fragment, container, false)
     }
 
+    var onItemClick :OnItemClickListener = object : OnItemClickListener{
+        override fun onClick(note: Note) {
+            showEditDialog(note)
+        }
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
         viewModel.dataList.observe(this, Observer { items ->
             notesRecyclerView.layoutManager = LinearLayoutManager(context)
-
-            notesAdapter = NotesAdapter(items)
+            notesAdapter = NotesAdapter(items, onItemClick)
             notesRecyclerView.adapter = notesAdapter
             notesRecyclerView.addItemDecoration(DividerItemDecoration(context!!, DividerItemDecoration.VERTICAL_LIST))
             val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
@@ -174,9 +190,37 @@ class NotesListFragment : Fragment() {
                     mAlertDialog.dismiss()
                 }
             }
-            System.out.println("Observing")
         })
 
+    }
+
+    fun showEditDialog(note : Note){
+        //Inflate the dialog with custom view
+        val mDialogView = LayoutInflater.from(context!!).inflate(R.layout.add_note, null)
+        mDialogView.txtId.text = note.id.toString()
+        mDialogView.txtTitle.setText(note.title)
+        //AlertDialogBuilder
+        val mBuilder = AlertDialog.Builder(context!!)
+            .setView(mDialogView)
+            .setTitle("Edit note")
+        //show dialog
+        val  mAlertDialog = mBuilder.show()
+        //Save button click
+        mDialogView.btnSave.setOnClickListener {
+            //dismiss dialog
+            mAlertDialog.dismiss()
+            //get title from EditText
+            val newTitle = mDialogView.txtTitle.text.toString()
+            val newNote = Note(note.id, newTitle)
+            System.out.println("Old title: ${note.title}")
+            System.out.println("New title: ${newTitle}")
+            replaceItem(note, newNote)
+        }
+        //cancel button click
+        mDialogView.btnCancel.setOnClickListener {
+            //dismiss dialog
+            mAlertDialog.dismiss()
+        }
     }
 
     fun removeItem(position: Int): Note {
@@ -198,9 +242,11 @@ class NotesListFragment : Fragment() {
     }
 
     fun addItem(note : Note){
-        viewModel.addData(note)
-        notesAdapter.notifyDataSetChanged()
+        viewModel.saveNotes(note)
     }
 
-
+    fun replaceItem(oldNote : Note, newNote: Note){
+        val position = viewModel.replaceNote(oldNote, newNote)
+        notesAdapter.notifyItemChanged(position)
+    }
 }
